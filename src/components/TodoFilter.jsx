@@ -1,43 +1,32 @@
 import React from 'react';
-import { Filter, ListTodo, CheckCircle, Clock, Star } from 'lucide-react';
+import { ListTodo, CheckCircle, Clock, Zap } from 'lucide-react';
+import { useTodo } from '../context/TodoContext';
 
-const TodoFilter = ({ filter, setFilter }) => {
+const TodoFilter = () => {
+  const { filter, setFilter } = useTodo();
+
   const filters = [
-    { id: 'all', label: 'Toutes', icon: <ListTodo className="h-4 w-4" />, count: null },
-    { id: 'active', label: 'Actives', icon: <Clock className="h-4 w-4" />, count: null },
-    { id: 'completed', label: 'Terminées', icon: <CheckCircle className="h-4 w-4" />, count: null },
-    { id: 'high', label: 'Priorité haute', icon: <Star className="h-4 w-4" />, count: null },
+    { id: 'all', label: 'Tout', icon: <ListTodo className="h-4 w-4" /> },
+    { id: 'active', label: 'En cours', icon: <Clock className="h-4 w-4" /> },
+    { id: 'completed', label: 'Fini', icon: <CheckCircle className="h-4 w-4" /> },
+    { id: 'high', label: 'Urgent', icon: <Zap className="h-4 w-4" /> },
   ];
-  
+
   return (
-    <div className="card mb-6">
-      <div className="flex items-center mb-4">
-        <div className="p-2 bg-gradient-to-r from-primary to-accent rounded-lg mr-3">
-          <Filter className="h-5 w-5 text-white" />
-        </div>
-        <h2 className="text-2xl font-display font-bold text-gray-800">Filtrer les tâches</h2>
-      </div>
-      
-      <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap items-center gap-3 mb-8 animate-reveal">
+      <div className="mr-2 text-xs font-black text-gray-400 uppercase tracking-widest hidden sm:block">Filtrer par :</div>
+      <div className="flex bg-white/50 dark:bg-surface-900/50 backdrop-blur-sm p-1.5 rounded-2xl border border-white/20 dark:border-white/5 shadow-sm overflow-x-auto no-scrollbar">
         {filters.map((f) => (
           <button
             key={f.id}
             onClick={() => setFilter(f.id)}
-            className={`flex items-center px-4 py-2 rounded-lg transition-all duration-300 ${
-              filter === f.id
-                ? 'bg-gradient-to-r from-primary to-accent text-white shadow-md'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+            className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl whitespace-nowrap transition-all duration-500 font-bold text-sm ${filter === f.id
+              ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg'
+              : 'text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
+              }`}
           >
-            <span className="mr-2">{f.icon}</span>
-            <span className="font-medium">{f.label}</span>
-            {f.count !== null && (
-              <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
-                filter === f.id ? 'bg-white text-primary' : 'bg-gray-300 text-gray-700'
-              }`}>
-                {f.count}
-              </span>
-            )}
+            <span className={filter === f.id ? 'animate-pulse' : ''}>{f.icon}</span>
+            <span>{f.label}</span>
           </button>
         ))}
       </div>

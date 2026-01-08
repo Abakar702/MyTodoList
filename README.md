@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# Todo Master - Application de Gestion de Tâches Avancée
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.0-38bdf8?style=for-the-badge&logo=tailwindcss)
+![Vercel](https://img.shields.io/badge/Vercel-Deployment-black?style=for-the-badge&logo=vercel)
 
-## Available Scripts
+Une application Todo List moderne, performante et esthétique développée avec React.js et Tailwind CSS.
 
-In the project directory, you can run:
+## 🚀 Fonctionnalités
 
-### `npm start`
+### 🌟 Core
+- **Architecture Moderne** : Utilisation de React Context API pour une gestion d'état scalable.
+- **Persistence** : Sauvegarde automatique des données dans le LocalStorage.
+- **Réactif** : Interface entièrement responsive (Desktop, Tablette, Mobile).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### ✨ Avancées
+- **Filtrage Intelligent** : Filtrez par statut (Toutes, Actives, Terminées) et Priorité.
+- **Recherche Instantanée** : Trouvez vos tâches rapidement via la barre de recherche.
+- **Catégorisation** : Ajoutez des catégories (Travail, Perso, Santé, etc.) pour organiser vos tâches.
+- **Priorités** : Gestion des niveaux de priorité (Basse, Moyenne, Haute).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🎨 UI / UX
+- **Mode Sombre (Dark Mode)** : Support natif du thème sombre avec détection automatique et bascule manuelle.
+- **Design System** : Interface soignée utilisant Tailwind CSS et Lucide Icons.
+- **Animations** : Interactions fluides pour une expérience utilisateur agréable.
 
-### `npm test`
+## 🛠 Architectures et Technologies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend** : React.js (Create React App)
+- **Styling** : Tailwind CSS
+- **Icônes** : Lucide React
+- **Gestion d'État** : Context API + Hooks (useState, useEffect, useMemo)
+- **Hooks Personnalisés** : `useLocalStorage`
 
-### `npm run build`
+## 📦 Installation et Démarrage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Cloner le projet**
+   ```bash
+   git clone https://github.com/Abakar702/MyTodoList.git
+   cd todo-app-avance
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Installer les dépendances**
+   ```bash
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Lancer en développement**
+   ```bash
+   npm start
+   ```
+   L'application sera accessible sur `http://localhost:3000`.
 
-### `npm run eject`
+## 🚢 Déploiement
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Vercel (Recommandé)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Installez Vercel CLI : `npm i -g vercel`
+2. Déployez simplement avec :
+   ```bash
+   vercel
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Builds Production
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Pour créer une version optimisée pour la production :
+```bash
+npm run build
+```
+Les fichiers seront générés dans le dossier `build`.
 
-## Learn More
+## 📂 Structure du Projet
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+src/
+├── components/      # Composants UI réutilisables
+│   ├── Header.jsx
+│   ├── TodoForm.jsx
+│   ├── TodoList.jsx
+│   ├── TodoItem.jsx
+│   ├── TodoFilter.jsx
+│   ├── TodoSearch.jsx
+│   └── TodoStats.jsx
+├── context/         # Gestion d'état global
+│   └── TodoContext.jsx
+├── hooks/           # Custom Hooks
+│   └── useLocalStorage.js
+├── App.js           # Composant racine
+└── index.css        # Styles globaux (Tailwind)
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📝 Auteur
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Développé avec ❤️ par [Abakar Dev]

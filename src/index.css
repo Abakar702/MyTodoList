@@ -1,28 +1,77 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --primary-gradient: linear-gradient(135deg, #4361ee 0%, #f72585 100%);
+    --bg-light: #f8fafc;
+    --bg-dark: #09090b;
+  }
+
   body {
-    @apply bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen;
+    @apply antialiased font-sans transition-colors duration-300;
+    background: var(--bg-light);
+    color: #1e293b;
+  }
+
+  .dark body {
+    background: var(--bg-dark);
+    color: #f1f5f9;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full hover:bg-primary-400 transition-colors;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary hover:bg-secondary text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95;
+    @apply relative overflow-hidden bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2.5 px-6 rounded-xl transition-all duration-300 shadow-premium hover:shadow-premium-hover active:scale-95 disabled:opacity-50;
+  }
+
+  .btn-gradient {
+    background: var(--primary-gradient);
+    @apply text-white font-bold py-3 px-8 rounded-2xl transition-all duration-500 shadow-premium hover:shadow-premium-hover hover:-translate-y-1 active:scale-95 text-center;
   }
 
   .btn-secondary {
-    @apply bg-white border border-primary text-primary hover:bg-primary hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-200;
+    @apply px-5 py-2.5 rounded-xl border-2 border-gray-100 dark:border-surface-800 font-medium text-gray-600 dark:text-gray-400 hover:border-primary-500 hover:text-primary-500 dark:hover:text-white transition-all duration-300;
   }
 
-  .card {
-    @apply bg-white rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl;
+  .card-glass {
+    @apply bg-white/80 dark:bg-surface-900/80 backdrop-blur-xl border border-white/20 dark:border-white/5 rounded-3xl shadow-premium p-8;
   }
 
-  .input-field {
-    @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+  .input-premium {
+    @apply w-full bg-gray-50 dark:bg-surface-800/50 border-2 border-transparent border-gray-100 dark:border-surface-800 rounded-2xl px-4 py-3.5 focus:border-primary-500 focus:bg-white dark:focus:bg-surface-800 outline-none transition-all duration-300 placeholder:text-gray-400 dark:placeholder:text-gray-500;
   }
+
+  .mesh-gradient {
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(67, 97, 238, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(247, 37, 133, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(67, 97, 238, 0.05) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(247, 37, 133, 0.05) 0px, transparent 50%);
+  }
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 500ms, transform 500ms;
 }

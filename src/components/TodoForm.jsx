@@ -1,124 +1,123 @@
 import React, { useState } from 'react';
-import { PlusCircle, Calendar, Tag, AlertCircle } from 'lucide-react';
+import { PlusCircle, Calendar, Tag, AlertCircle, Sparkles } from 'lucide-react';
+import { useTodo } from '../context/TodoContext';
 
-const TodoForm = ({ addTodo }) => {
+const TodoForm = () => {
+  const { addTodo } = useTodo();
   const [text, setText] = useState('');
   const [priority, setPriority] = useState('moyenne');
   const [category, setCategory] = useState('');
   const [dueDate, setDueDate] = useState('');
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (text.trim() === '') {
-      return;
-    }
-    
-    const newTodo = {
-      id: Date.now(),
+    if (text.trim() === '') return;
+
+    addTodo({
       text: text.trim(),
       completed: false,
       priority,
       category: category || null,
       dueDate: dueDate || null,
-      createdAt: new Date().toISOString(),
-    };
-    
-    addTodo(newTodo);
+    });
+
     setText('');
     setCategory('');
     setDueDate('');
     setPriority('moyenne');
   };
-  
-  const categories = ['travail', 'personnel', 'courses', 'santé', 'loisirs', 'éducation'];
-  
+
+  const categories = ['Travail', 'Personnel', 'Courses', 'Santé', 'Loisirs', 'Éducation'];
+
   return (
-    <div className="card mb-8">
-      <div className="flex items-center mb-6">
-        <div className="p-2 bg-gradient-to-r from-primary to-accent rounded-lg mr-3">
-          <PlusCircle className="h-5 w-5 text-white" />
+    <div className="card-glass mb-12 animate-reveal">
+      <div className="flex items-center space-x-3 mb-8">
+        <div className="p-3 bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 rounded-2xl">
+          <Sparkles className="h-6 w-6" />
         </div>
-        <h2 className="text-2xl font-display font-bold text-gray-800">Nouvelle Tâche</h2>
+        <h2 className="text-2xl font-display font-black text-gray-900 dark:text-white tracking-tight">Nouvelle Mission</h2>
       </div>
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="todoText" className="block text-sm font-medium text-gray-700 mb-2">
-            Que devez-vous faire ?
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="group">
+          <label htmlFor="todoText" className="block text-sm font-bold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-widest ml-1">
+            Détails de la tâche
           </label>
           <input
             id="todoText"
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Ex: Préparer la présentation pour la réunion..."
-            className="input-field"
+            placeholder="Qu'allons-nous accomplir aujourd'hui ?"
+            className="input-premium text-lg"
             required
           />
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <AlertCircle className="h-4 w-4 mr-1" />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-2">
+            <label className="text-xs font-black text-gray-400 uppercase tracking-widest flex items-center ml-1">
+              <AlertCircle className="h-3.5 w-3.5 mr-1.5 text-primary-500" />
               Priorité
             </label>
-            <select
-              id="priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="input-field"
-            >
-              <option value="basse">Basse</option>
-              <option value="moyenne">Moyenne</option>
-              <option value="haute">Haute</option>
-            </select>
+            <div className="flex p-1.5 bg-gray-50 dark:bg-surface-800 rounded-2xl border border-gray-100 dark:border-surface-700">
+              {['basse', 'moyenne', 'haute'].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPriority(p)}
+                  className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold uppercase tracking-tighter transition-all duration-300 ${priority === p
+                    ? 'bg-white dark:bg-surface-700 text-primary-600 dark:text-primary-400 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                    }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
           </div>
-          
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <Tag className="h-4 w-4 mr-1" />
-              Catégorie (optionnel)
+
+          <div className="space-y-2">
+            <label htmlFor="category" className="text-xs font-black text-gray-400 uppercase tracking-widest flex items-center ml-1">
+              <Tag className="h-3.5 w-3.5 mr-1.5 text-accent-500" />
+              Catégorie
             </label>
             <select
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="input-field"
+              className="input-premium !py-2.5 !text-sm"
             >
-              <option value="">Aucune catégorie</option>
+              <option value="">Général</option>
               {categories.map(cat => (
-                <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+                <option key={cat} value={cat.toLowerCase()}>{cat}</option>
               ))}
             </select>
           </div>
-          
-          <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <Calendar className="h-4 w-4 mr-1" />
-              Date limite (optionnel)
+
+          <div className="space-y-2">
+            <label htmlFor="dueDate" className="text-xs font-black text-gray-400 uppercase tracking-widest flex items-center ml-1">
+              <Calendar className="h-3.5 w-3.5 mr-1.5 text-blue-500" />
+              Echéance
             </label>
             <input
               id="dueDate"
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="input-field"
+              className="input-premium !py-2.5 !text-sm"
               min={new Date().toISOString().split('T')[0]}
             />
           </div>
         </div>
-        
-        <div className="pt-4">
-          <button
-            type="submit"
-            className="btn-primary w-full py-3 flex items-center justify-center"
-          >
-            <PlusCircle className="h-5 w-5 mr-2" />
-            Ajouter la tâche
-          </button>
-        </div>
+
+        <button
+          type="submit"
+          className="btn-gradient w-full flex items-center justify-center space-x-2 group"
+        >
+          <PlusCircle className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
+          <span>Ajouter au Kanban</span>
+        </button>
       </form>
     </div>
   );

@@ -1,192 +1,108 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Header from './components/Header';
 import TodoForm from './components/TodoForm';
 import TodoFilter from './components/TodoFilter';
 import TodoStats from './components/TodoStats';
 import TodoList from './components/TodoList';
-import useLocalStorage from './hooks/useLocalStorage';
+import TodoSearch from './components/TodoSearch';
+import Toast from './components/Toast';
+import { TodoProvider, useTodo } from './context/TodoContext';
+import { AuthProvider } from './context/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
-function App() {
-  // Utilisation de notre hook personnalisé pour le stockage local
-  const [todos, setTodos] = useLocalStorage('todos', [
-    {
-      id: 1,
-      text: 'Apprendre les hooks React avancés',
-      completed: true,
-      priority: 'haute',
-      category: 'éducation',
-      dueDate: '2024-12-10',
-      createdAt: '2024-12-01T10:00:00Z',
-      completedAt: '2024-12-05T15:30:00Z',
-    },
-    {
-      id: 2,
-      text: 'Créer un projet React avec Tailwind CSS',
-      completed: true,
-      priority: 'haute',
-      category: 'travail',
-      dueDate: '2024-12-15',
-      createdAt: '2024-12-02T09:00:00Z',
-      completedAt: '2024-12-10T11:45:00Z',
-    },
-    {
-      id: 3,
-      text: 'Préparer la présentation pour la réunion',
-      completed: false,
-      priority: 'haute',
-      category: 'travail',
-      dueDate: '2024-12-20',
-      createdAt: '2024-12-10T14:20:00Z',
-    },
-    {
-      id: 4,
-      text: 'Faire les courses de la semaine',
-      completed: false,
-      priority: 'moyenne',
-      category: 'courses',
-      dueDate: '2024-12-18',
-      createdAt: '2024-12-12T16:45:00Z',
-    },
-    {
-      id: 5,
-      text: 'Aller à la salle de sport',
-      completed: false,
-      priority: 'basse',
-      category: 'santé',
-      dueDate: '2024-12-16',
-      createdAt: '2024-12-13T08:30:00Z',
-    },
-  ]);
-
-  const [filter, setFilter] = useState('all');
-  const [darkMode, setDarkMode] = useState(false);
-
-  // Effet pour appliquer le mode sombre
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
-
-  // Fonction pour ajouter une nouvelle tâche
-  const addTodo = (todo) => {
-    setTodos([...todos, todo]);
-  };
-
-  // Fonction pour basculer l'état d'une tâche
-  const toggleTodo = (id) => {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          const updatedTodo = {
-            ...todo,
-            completed: !todo.completed,
-            completedAt: !todo.completed ? new Date().toISOString() : null,
-          };
-          return updatedTodo;
-        }
-        return todo;
-      })
-    );
-  };
-
-  // Fonction pour supprimer une tâche
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  // Fonction pour modifier une tâche
-  const editTodo = (id, newText) => {
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, text: newText } : todo
-      )
-    );
-  };
-
-  // Fonction pour basculer le mode sombre
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
-  // Fonction pour effacer toutes les tâches terminées
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
-  };
+const TodoAppContent = () => {
+  const { todos, clearCompleted } = useTodo();
+  const activeCount = todos.filter(t => !t.completed).length;
+  const hasCompleted = todos.some(t => t.completed);
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark bg-gray-900' : ''}`}>
-      <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark:bg-gray-900 dark:text-gray-100' : ''}`}>
-        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+    <div className="min-h-screen mesh-gradient relative pb-20 overflow-x-hidden">
+      <Toast />
+      {/* Decorative background blobs */}
+      <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent-500/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-        <main className="max-w-6xl mx-auto px-4 md:px-8 pb-12">
-          <TodoStats todos={todos} />
+      <div className="relative z-10">
+        <Header />
 
-          <TodoForm addTodo={addTodo} />
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TodoStats />
 
-          <TodoFilter filter={filter} setFilter={setFilter} />
+          <div className="relative">
+            <TodoForm />
 
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-display font-bold text-gray-800 dark:text-gray-100">
-              Vos tâches
-              <span className="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
-                ({todos.filter(t => !t.completed).length} restantes)
-              </span>
-            </h2>
-
-            {todos.some(todo => todo.completed) && (
-              <button
-                onClick={clearCompleted}
-                className="btn-secondary text-sm"
-              >
-                Effacer les terminées
-              </button>
-            )}
-          </div>
-
-          <TodoList
-            todos={todos}
-            toggleTodo={toggleTodo}
-            deleteTodo={deleteTodo}
-            editTodo={editTodo}
-            filter={filter}
-          />
-
-          <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-              <div className="mb-4 md:mb-0">
-                <p className="font-medium">Conseils de productivité :</p>
-                <p className="mt-1">Commencez par les tâches de priorité haute pour maximiser votre efficacité.</p>
-              </div>
-
-              <div className="flex items-center space-x-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-primary">{todos.length}</div>
-                  <div className="text-xs">Total tâches</div>
+            <div className="sticky top-4 z-40 bg-white/40 dark:bg-surface-950/40 backdrop-blur-md rounded-3xl p-4 border border-white/20 dark:border-white/5 shadow-2xl mb-12 animate-reveal" style={{ animationDelay: '200ms' }}>
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <div className="flex-1 w-full">
+                  <TodoSearch />
                 </div>
-
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-emerald-500">
-                    {todos.length > 0
-                      ? Math.round((todos.filter(t => t.completed).length / todos.length) * 100)
-                      : 0}%
-                  </div>
-                  <div className="text-xs">Taux de complétion</div>
+                <div className="w-full md:w-auto">
+                  <TodoFilter />
                 </div>
               </div>
             </div>
+
+            <div className="flex justify-between items-center mb-8 px-2 animate-reveal" style={{ animationDelay: '300ms' }}>
+              <div className="flex items-center space-x-4">
+                <h2 className="text-3xl font-display font-black text-gray-900 dark:text-white tracking-tight">
+                  Missions
+                </h2>
+                <div className="px-4 py-1.5 bg-primary-600 text-white text-xs font-black uppercase tracking-widest rounded-full shadow-lg shadow-primary-200 dark:shadow-none">
+                  {activeCount} active{activeCount > 1 ? 's' : ''}
+                </div>
+              </div>
+
+              {hasCompleted && (
+                <button
+                  onClick={clearCompleted}
+                  className="group flex items-center space-x-2 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-rose-500 transition-colors duration-300"
+                >
+                  <span className="w-8 h-[1px] bg-gray-200 group-hover:bg-rose-200 transition-colors"></span>
+                  <span>Nettoyer l'espace</span>
+                </button>
+              )}
+            </div>
+
+            <TodoList />
           </div>
         </main>
 
-        <footer className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm border-t border-gray-100 dark:border-gray-800">
-          <p>Todo Master © {new Date().getFullYear()} - Organisez votre vie efficacement</p>
-          <p className="mt-1">Créé avec React, Tailwind CSS </p>
+        <footer className="max-w-4xl mx-auto px-4 mt-20 pb-12 text-center animate-reveal" style={{ animationDelay: '500ms' }}>
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-200 dark:via-surface-700 to-transparent mb-10"></div>
+          <div className="flex flex-col items-center gap-6">
+            <div className="flex items-center gap-4 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 dark:text-gray-500">
+              <span className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                Cloud Engine v2.4
+              </span>
+              <span className="hidden sm:inline w-1 h-1 bg-gray-300 dark:bg-surface-700 rounded-full"></span>
+              <span className="text-gray-900 dark:text-white opacity-40">Encrypted Session</span>
+            </div>
+
+            <div className="flex flex-col md:flex-row justify-between w-full items-center gap-4 text-gray-500 dark:text-gray-400 text-[11px] font-medium">
+              <p>© {new Date().getFullYear()} <span className="text-gray-900 dark:text-white font-bold">Zenith Master</span>. Digital Excellence.</p>
+              <div className="flex items-center gap-3">
+                <span className="w-8 h-px bg-gray-200 dark:bg-surface-800"></span>
+                <p>Architecturé par <span className="text-primary-600 dark:text-primary-400 font-bold">Abakar Dev</span></p>
+              </div>
+            </div>
+          </div>
         </footer>
       </div>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <AuthProvider>
+        <TodoProvider>
+          <TodoAppContent />
+        </TodoProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 
