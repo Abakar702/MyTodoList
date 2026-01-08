@@ -1,23 +1,12 @@
 {
-  "short_name": "TodoMaster",
-  "name": "Todo Master | Productivité Premium",
+  "short_name": "ZenithMaster",
+  "name": "Zenith Master | Productivité Premium",
   "description": "L'application de gestion de tâches la plus fluide et moderne pour organiser votre quotidien.",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
+      "src": "logo-zenith.png",
       "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ],

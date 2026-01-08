@@ -23,3 +23,14 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+firebase-debug.log*
+.eslintcache
+
+# Vercel
+.vercel
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
